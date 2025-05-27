@@ -6,7 +6,7 @@ import 'package:graduation_project/home_screen/data/model/offers_model_response/
 import 'package:graduation_project/home_screen/data/model/services_model_response/service_model.dart';
 import 'package:graduation_project/home_screen/data/model/topSelling_model_response/TopSellinModelResponse.dart';
 import 'package:graduation_project/home_screen/data/model/search_model_response/SearchModelResponse.dart'
-    as search; // Alias
+as search; // Alias
 
 abstract class HomeState {}
 

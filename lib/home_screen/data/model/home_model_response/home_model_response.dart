@@ -1,5 +1,4 @@
 import 'package:graduation_project/home_screen/data/model/category_model/category_model.dart';
-
 import 'items.dart';
 
 class HomeModelResponse {
@@ -22,8 +21,8 @@ class HomeModelResponse {
   }
 
   Map<String, dynamic> toJson() => {
-        'status': status,
-        'categories': categories?.toJson(),
-        'items': items?.toJson(),
-      };
+    'status': status,
+    'categories': categories?.toJson(),
+    'items': items?.toJson(),
+  };
 }
