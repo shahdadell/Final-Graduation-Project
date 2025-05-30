@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1077568520492",
+    "project_id": "outbye-e17d3",
+    "storage_bucket": "outbye-e17d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077568520492:android:d5286f508caaedc4dd6c89",
+        "android_client_info": {
+          "package_name": "com.example.graduation_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077568520492-n70g97ob59j3m0mq8llmh0t3k1psj155.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkUhnIkBOm5iL-UBWFiHAg8A7PWpCd_Hg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077568520492-n70g97ob59j3m0mq8llmh0t3k1psj155.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
