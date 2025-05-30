@@ -163,7 +163,7 @@ class HomeRepo {
   }) async {
     try {
       final token = await AppLocalStorage.getData('token');
-      var response = await DioProvider.get(
+      var response = await DioProvider.post(
         endpoint: "${AppEndpoints.fetchItems}?id=$serviceId&userid=$userId",
         headers: {
           'Authorization': 'Bearer $token',

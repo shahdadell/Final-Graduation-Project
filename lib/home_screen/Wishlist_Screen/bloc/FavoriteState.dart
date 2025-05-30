@@ -34,7 +34,11 @@ class FetchFavoriteErrorState extends FavoriteState {
   FetchFavoriteErrorState({required this.message});
 }
 
-class DeleteFavoriteItemLoadingState extends FavoriteState {}
+class DeleteFavoriteItemLoadingState extends FavoriteState {
+  final int itemId; // إضافة itemId لتحديد العنصر اللي بيحمل
+
+  DeleteFavoriteItemLoadingState({required this.itemId});
+}
 
 class DeleteFavoriteItemSuccessState extends FavoriteState {
   final DeleteFromFav deleteResponse;

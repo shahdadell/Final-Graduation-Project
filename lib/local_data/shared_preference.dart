@@ -18,64 +18,54 @@ class AppLocalStorage {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  // دالة للتحقق من انتهاء التوكن
   static bool isTokenExpired() {
     final expiryTimeInMillis = _preferences.getInt('token_expiry');
-    if (expiryTimeInMillis == null)
-      return true; // لو مفيش وقت انتهاء، اعتبر التوكن منتهي
+    if (expiryTimeInMillis == null) return true;
 
     final currentTimeInMillis = DateTime.now().millisecondsSinceEpoch;
     return currentTimeInMillis >= expiryTimeInMillis;
   }
 
-  // دالة للتحقق إذا كان المستخدم مسجل دخول
   static bool isLoggedIn() {
     String? token = _preferences.getString('token');
     return token != null && token.isNotEmpty;
   }
 
-  // دالة للتحقق إذا كان المستخدم في وضع الـ Guest
   static bool isGuest() {
     return _preferences.getBool('is_guest') ?? false;
   }
 
-  // دالة لتفعيل وضع الـ Guest
-  static Future<void> setGuestMode() async {
-    await _preferences.setBool('is_guest', true);
-    // امسحي كل البيانات المتعلقة بالـ session فقط (مش الإشعارات)
-    await _preferences.remove('token');
-    await _preferences.remove('token_expiry');
-    await _preferences.remove('user_id');
+  static Future<void> setGuestMode(bool isGuest) async {
+    await _preferences.setBool('is_guest', isGuest);
+    if (isGuest) {
+      await _preferences.remove('token');
+      await _preferences.remove('token_expiry');
+      await _preferences.remove('user_id');
 
-    // إيقاف الـ push notifications
-    try {
-      await _firebaseMessaging
-          .setAutoInitEnabled(false); // إيقاف الإشعارات التلقائية
-      await _firebaseMessaging.deleteToken(); // حذف الـ FCM token
-      print('Push notifications disabled for guest mode');
-    } catch (e) {
-      print('Error disabling notifications: $e');
+      try {
+        await _firebaseMessaging.setAutoInitEnabled(false);
+        await _firebaseMessaging.deleteToken();
+        print('Push notifications disabled for guest mode');
+      } catch (e) {
+        print('Error disabling notifications: $e');
+      }
     }
   }
 
-  // دالة لإلغاء وضع الـ Guest
   static Future<void> clearGuestMode() async {
     await _preferences.remove('is_guest');
 
-    // إعادة تفعيل الإشعارات
     try {
       await _firebaseMessaging.setAutoInitEnabled(true);
-      await _firebaseMessaging.getToken(); // إعادة توليد الـ FCM token
+      await _firebaseMessaging.getToken();
       print('Push notifications enabled after guest mode');
     } catch (e) {
       print('Error enabling notifications: $e');
     }
   }
 
-  // دالة لعمل logout
   static Future<void> logout(BuildContext context) async {
     try {
-      // استدعاء الـ logout API
       ApiManager apiManager = ApiManager.getInstance();
       LogOutResponse response = await apiManager.logout();
 
@@ -105,11 +95,9 @@ class AppLocalStorage {
         ),
       );
     } finally {
-      // امسحي البيانات في كل الحالات
       await clearData();
-      await clearGuestMode(); // نتأكد إن وضع الـ Guest يتم إلغاؤه لو كان مفعل
+      await clearGuestMode();
 
-      // انقلي المستخدم لشاشة تسجيل الدخول
       Navigator.pushNamedAndRemoveUntil(
         context,
         SignInScreen.routName,

@@ -123,10 +123,8 @@ class MainScreen extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () async {
-                      // تفعيل وضع الـ Guest
-                      await AppLocalStorage.setGuestMode();
+                      await AppLocalStorage.setGuestMode(true); // تعديل لتحديد true
                       print("Guest mode activated");
-                      // الانتقال لصفحة HomeScreen
                       Navigator.of(context)
                           .pushReplacementNamed(HomeScreen.routName);
                     },

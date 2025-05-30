@@ -12,6 +12,7 @@ import '../DiscountListWidget/DiscountListWidget.dart';
 import '../SearchFieldWidget/SearchFieldWidget.dart';
 import '../SpecialOfferCarouselWidget/SpecialOfferCarouselWidget.dart';
 import '../TopSellingListWidget/TopSellingListWidget.dart';
+import 'package:graduation_project/local_data/shared_preference.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routName = 'HomeScreen';
@@ -27,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch data immediately when the screen loads
     context.read<HomeBloc>().add(FetchHomeDataEvent(null));
     context.read<HomeBloc>().add(FetchTopSellingEvent());
     context.read<HomeBloc>().add(FetchOffersEvent());
@@ -50,8 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         String? errorMessage;
+        bool isGuest = await AppLocalStorage.isGuest();
+
         if (state is HomeErrorState) {
           errorMessage = state.message;
         } else if (state is FetchOffersErrorState) {
@@ -64,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           errorMessage = state.message;
         }
 
-        if (errorMessage != null) {
+        if (errorMessage != null && !isGuest) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: $errorMessage')),
           );

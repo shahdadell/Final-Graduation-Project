@@ -44,7 +44,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
   Future<void> _onDeleteFavoriteItem(
       DeleteFavoriteItemEvent event, Emitter<FavoriteState> emit) async {
-    emit(DeleteFavoriteItemLoadingState());
+    emit(DeleteFavoriteItemLoadingState(itemId: event.itemId)); // تعديل هنا
     try {
       final response = await FavoriteRepo.deleteFavoriteItem(
         userId: event.userId,
