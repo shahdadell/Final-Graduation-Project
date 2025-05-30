@@ -116,7 +116,7 @@ class DiscountCard extends StatelessWidget {
               Text(
                 "${item.itemsPrice ?? 'N/A'} EGP",
                 style: TextStyle(
-                  fontSize: 11.sp,
+                  fontSize: 12.sp,
                   color: Colors.green[700],
                   fontWeight: FontWeight.bold,
                 ),

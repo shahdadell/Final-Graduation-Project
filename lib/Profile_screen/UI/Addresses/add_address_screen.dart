@@ -62,11 +62,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               setState(() {
                 isDialogShown = false;
               });
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AddressesScreen()),
-              );
+              // بدل ما نروح للـ AddressesScreen، هنرجع للـ CartScreen مع قيمة true
+              Navigator.pop(context, true);
             },
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             titleTextStyle: textTheme.displayMedium?.copyWith(
@@ -113,7 +110,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: InkWell(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              // لما يضغط على زرار الرجوع، نرجع مع قيمة false
+              Navigator.pop(context, false);
+            },
             child: Padding(
               padding: EdgeInsets.all(12.w),
               child: Icon(
@@ -131,11 +131,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               color: MyTheme.whiteColor,
             ),
           ).animate().fadeIn(duration: 400.ms).slideY(
-                begin: 0.1,
-                end: 0.0,
-                duration: 400.ms,
-                curve: Curves.easeOut,
-              ),
+            begin: 0.1,
+            end: 0.0,
+            duration: 400.ms,
+            curve: Curves.easeOut,
+          ),
           centerTitle: true,
           backgroundColor: MyTheme.orangeColor,
           elevation: 4,
@@ -418,11 +418,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     ),
                   ),
                 ).animate().fadeIn(duration: 600.ms).scale(
-                      begin: const Offset(0.9, 0.9),
-                      end: const Offset(1.0, 1.0),
-                      duration: 600.ms,
-                      curve: Curves.easeOut,
-                    ),
+                  begin: const Offset(0.9, 0.9),
+                  end: const Offset(1.0, 1.0),
+                  duration: 600.ms,
+                  curve: Curves.easeOut,
+                ),
               ),
             ),
           ),
@@ -463,7 +463,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyTheme.orangeColor,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -474,68 +474,68 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               )
                   .animate()
                   .scale(
-                    begin: const Offset(1.0, 1.0),
-                    end: const Offset(1.03, 1.03),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  )
+                begin: const Offset(1.0, 1.0),
+                end: const Offset(1.03, 1.03),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              )
                   .then()
                   .scale(
-                    begin: const Offset(1.03, 1.03),
-                    end: const Offset(1.0, 1.0),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  ),
+                begin: const Offset(1.03, 1.03),
+                end: const Offset(1.0, 1.0),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              ),
               SizedBox(height: 8.h),
               ElevatedButton(
                 onPressed: isButtonEnabled
                     ? () {
-                        if (formKey.currentState!.validate()) {
-                          if (latitude.isEmpty || longitude.isEmpty) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.warning,
-                              animType: AnimType.scale,
-                              title: 'Warning',
-                              desc: 'Please select a location',
-                              btnOkText: 'OK',
-                              btnOkColor: MyTheme.redColor,
-                              btnOkOnPress: () {},
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w, vertical: 16.h),
-                              titleTextStyle: textTheme.displayMedium?.copyWith(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: MyTheme.blackColor,
-                              ),
-                              descTextStyle: textTheme.bodyMedium?.copyWith(
-                                fontSize: 14.sp,
-                                color: MyTheme.grayColor2,
-                              ),
-                            ).show();
-                            return;
-                          }
-                          setState(() {
-                            isButtonEnabled = false;
-                          });
-                          context.read<AddressBloc>().add(
-                                AddAddressEvent(
-                                  addressName: addressTitleController.text,
-                                  addressPhone: addressPhoneController.text,
-                                  addressCity: addressCityController.text,
-                                  addressStreet: addressDetailsController.text,
-                                  addressLat: latitude,
-                                  addressLong: longitude,
-                                ),
-                              );
-                        }
-                      }
+                  if (formKey.currentState!.validate()) {
+                    if (latitude.isEmpty || longitude.isEmpty) {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.warning,
+                        animType: AnimType.scale,
+                        title: 'Warning',
+                        desc: 'Please select a location',
+                        btnOkText: 'OK',
+                        btnOkColor: MyTheme.redColor,
+                        btnOkOnPress: () {},
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 16.h),
+                        titleTextStyle: textTheme.displayMedium?.copyWith(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: MyTheme.blackColor,
+                        ),
+                        descTextStyle: textTheme.bodyMedium?.copyWith(
+                          fontSize: 14.sp,
+                          color: MyTheme.grayColor2,
+                        ),
+                      ).show();
+                      return;
+                    }
+                    setState(() {
+                      isButtonEnabled = false;
+                    });
+                    context.read<AddressBloc>().add(
+                      AddAddressEvent(
+                        addressName: addressTitleController.text,
+                        addressPhone: addressPhoneController.text,
+                        addressCity: addressCityController.text,
+                        addressStreet: addressDetailsController.text,
+                        addressLat: latitude,
+                        addressLong: longitude,
+                      ),
+                    );
+                  }
+                }
                     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      isButtonEnabled ? MyTheme.orangeColor : MyTheme.grayColor,
+                  isButtonEnabled ? MyTheme.orangeColor : MyTheme.grayColor,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -553,25 +553,28 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               )
                   .animate()
                   .scale(
-                    begin: const Offset(1.0, 1.0),
-                    end: const Offset(1.03, 1.03),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  )
+                begin: const Offset(1.0, 1.0),
+                end: const Offset(1.03, 1.03),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              )
                   .then()
                   .scale(
-                    begin: const Offset(1.03, 1.03),
-                    end: const Offset(1.0, 1.0),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  ),
+                begin: const Offset(1.03, 1.03),
+                end: const Offset(1.0, 1.0),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              ),
               SizedBox(height: 8.h),
               ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  // لما يضغط Cancel، نرجع مع قيمة false
+                  Navigator.pop(context, false);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyTheme.grayColor,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -589,18 +592,18 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               )
                   .animate()
                   .scale(
-                    begin: const Offset(1.0, 1.0),
-                    end: const Offset(1.03, 1.03),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  )
+                begin: const Offset(1.0, 1.0),
+                end: const Offset(1.03, 1.03),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              )
                   .then()
                   .scale(
-                    begin: const Offset(1.03, 1.03),
-                    end: const Offset(1.0, 1.0),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeInOut,
-                  ),
+                begin: const Offset(1.03, 1.03),
+                end: const Offset(1.0, 1.0),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+              ),
             ],
           ),
         ),

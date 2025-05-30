@@ -109,29 +109,7 @@ class NotificationScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.h),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, HomeScreen.routName);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyTheme.orangeColor,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.w, vertical: 12.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      elevation: 5,
-                      shadowColor: MyTheme.orangeColor.withOpacity(0.4),
-                    ),
-                    child: Text(
-                      'Go to Home',
-                      style:
-                          MyTheme.lightTheme.textTheme.displayMedium?.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             );

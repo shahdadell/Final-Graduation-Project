@@ -40,61 +40,65 @@ class CategoriesGridWidget extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => ServicesScreen(
                           categoryId:
-                              state.categories[index].categoriesId.toString(),
+                          state.categories[index].categoriesId.toString(),
                           categoryName:
-                              state.categories[index].categoriesName ??
-                                  'Unknown',
+                          state.categories[index].categoriesName ??
+                              'Unknown',
                         ),
                       ),
                     );
                   },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 60.w,
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Colors.white, Colors.grey[50]!],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              blurRadius: 6.r,
-                              spreadRadius: 1.r,
+                  child: FittedBox(
+                    // Add FittedBox to prevent overflow
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 60.w,
+                          height: 50.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Colors.white, Colors.grey[50]!],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: Image.network(
-                            state.categories[index].categoriesImage ?? '',
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[200],
-                                child: Icon(Icons.broken_image,
-                                    size: 25.w, color: Colors.grey[400]),
-                              );
-                            },
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                blurRadius: 6.r,
+                                spreadRadius: 1.r,
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image.network(
+                              state.categories[index].categoriesImage ?? '',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[200],
+                                  child: Icon(Icons.broken_image,
+                                      size: 25.w, color: Colors.grey[400]),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 5.h),
-                      Text(
-                        state.categories[index].categoriesName ?? 'Unknown',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11.sp,
-                          color: Colors.black87,
+                        SizedBox(height: 5.h),
+                        Text(
+                          state.categories[index].categoriesName ?? 'Unknown',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11.sp,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

@@ -33,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
   String? selectedAddressId;
   int paymentMethod = 0;
   bool isDialogShown = false;
-  bool hasNavigatedToAddAddress = false;
+  bool hasNavigatedToAddAddress = false; // للتحكم في التوجيه لصفحة إضافة العنوان
   final TextEditingController _couponController = TextEditingController();
   int? couponId;
   double couponDiscount = 0.0;
@@ -140,7 +140,7 @@ class _CartScreenState extends State<CartScreen> {
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     padding:
-                        EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
+                    EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
                     elevation: 5,
                     shadowColor: MyTheme.orangeColor.withOpacity(0.4),
                   ),
@@ -252,7 +252,7 @@ class _CartScreenState extends State<CartScreen> {
               couponId =
                   int.tryParse(state.couponResponse.data?.couponId ?? '0');
               couponDiscount = double.tryParse(
-                      state.couponResponse.data?.couponDiscount ?? '0.0') ??
+                  state.couponResponse.data?.couponDiscount ?? '0.0') ??
                   0.0;
               isCouponApplied = true;
             });
@@ -401,7 +401,7 @@ class _CartScreenState extends State<CartScreen> {
                           onRefresh: () => _refreshCart(context),
                           color: MyTheme.orangeColor,
                           child:
-                              _buildCartList(context, allItems, userId, cart),
+                          _buildCartList(context, allItems, userId, cart),
                         );
                       }
                       return RefreshIndicator(
@@ -465,7 +465,7 @@ class _CartScreenState extends State<CartScreen> {
                                         horizontal: 30.w, vertical: 12.h),
                                     elevation: 5,
                                     shadowColor:
-                                        MyTheme.orangeColor.withOpacity(0.4),
+                                    MyTheme.orangeColor.withOpacity(0.4),
                                   ),
                                   child: Text(
                                     'Retry',
@@ -495,7 +495,7 @@ class _CartScreenState extends State<CartScreen> {
                         Text(
                           'Loading your cart...',
                           style:
-                              MyTheme.lightTheme.textTheme.titleSmall?.copyWith(
+                          MyTheme.lightTheme.textTheme.titleSmall?.copyWith(
                             fontSize: 18.sp,
                             color: MyTheme.mauveColor,
                           ),
@@ -597,29 +597,29 @@ class _CartScreenState extends State<CartScreen> {
                           borderRadius: BorderRadius.circular(8.r),
                           child: item.image != null || item.itemsImage != null
                               ? CachedNetworkImage(
-                                  imageUrl: item.image ?? item.itemsImage!,
-                                  width: 70.w,
-                                  height: 60.h,
-                                  fit: BoxFit.cover,
-                                  memCacheHeight: (60.h).toInt(),
-                                  memCacheWidth: (60.w).toInt(),
-                                  placeholder: (context, url) => Center(
-                                    child: CircularProgressIndicator(
-                                      color: MyTheme.orangeColor,
-                                      strokeWidth: 2.w,
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.fastfood_rounded,
-                                    size: 24.w,
-                                    color: MyTheme.orangeColor,
-                                  ),
-                                )
+                            imageUrl: item.image ?? item.itemsImage!,
+                            width: 70.w,
+                            height: 60.h,
+                            fit: BoxFit.cover,
+                            memCacheHeight: (60.h).toInt(),
+                            memCacheWidth: (60.w).toInt(),
+                            placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(
+                                color: MyTheme.orangeColor,
+                                strokeWidth: 2.w,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.fastfood_rounded,
+                              size: 24.w,
+                              color: MyTheme.orangeColor,
+                            ),
+                          )
                               : Icon(
-                                  Icons.fastfood_rounded,
-                                  size: 24.w,
-                                  color: MyTheme.orangeColor,
-                                ),
+                            Icons.fastfood_rounded,
+                            size: 24.w,
+                            color: MyTheme.orangeColor,
+                          ),
                         ),
                         SizedBox(width: 12.w),
                         Expanded(
@@ -679,23 +679,23 @@ class _CartScreenState extends State<CartScreen> {
                                 onTap: () {
                                   if (item.cartItemsid != null &&
                                       (int.tryParse(item.cartQuantity ?? '0') ??
-                                              0) >
+                                          0) >
                                           1) {
                                     context
                                         .read<CartBloc>()
                                         .add(DeleteCartItemEvent(
-                                          userId: userId,
-                                          itemId: int.parse(item.cartItemsid!),
-                                          type: type,
-                                        ));
+                                      userId: userId,
+                                      itemId: int.parse(item.cartItemsid!),
+                                      type: type,
+                                    ));
                                   } else if (item.cartItemsid != null) {
                                     context
                                         .read<CartBloc>()
                                         .add(DeleteCartItemEvent(
-                                          userId: userId,
-                                          itemId: int.parse(item.cartItemsid!),
-                                          type: type,
-                                        ));
+                                      userId: userId,
+                                      itemId: int.parse(item.cartItemsid!),
+                                      type: type,
+                                    ));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -735,11 +735,11 @@ class _CartScreenState extends State<CartScreen> {
                                 onTap: () {
                                   if (item.cartItemsid != null) {
                                     context.read<CartBloc>().add(AddToCartEvent(
-                                          userId: userId,
-                                          itemId: int.parse(item.cartItemsid!),
-                                          quantity: 1,
-                                          type: type, // تم إضافة حقل type هنا
-                                        ));
+                                      userId: userId,
+                                      itemId: int.parse(item.cartItemsid!),
+                                      quantity: 1,
+                                      type: type,
+                                    ));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -769,27 +769,27 @@ class _CartScreenState extends State<CartScreen> {
                                 onTap: isLoading
                                     ? null
                                     : () {
-                                        if (item.cartItemsid != null) {
-                                          context.read<CartBloc>().add(
-                                                DeleteCartItemEvent(
-                                                  userId: userId,
-                                                  itemId: int.parse(
-                                                      item.cartItemsid!),
-                                                  type: type,
-                                                ),
-                                              );
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Cannot remove item: Missing item ID'),
-                                              backgroundColor: Colors.redAccent,
-                                              duration: Duration(seconds: 2),
-                                            ),
-                                          );
-                                        }
-                                      },
+                                  if (item.cartItemsid != null) {
+                                    context.read<CartBloc>().add(
+                                      DeleteCartItemEvent(
+                                        userId: userId,
+                                        itemId: int.parse(
+                                            item.cartItemsid!),
+                                        type: type,
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Cannot remove item: Missing item ID'),
+                                        backgroundColor: Colors.redAccent,
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                },
                                 child: Container(
                                   padding: EdgeInsets.all(4.w),
                                   decoration: BoxDecoration(
@@ -798,18 +798,18 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   child: isLoading
                                       ? SizedBox(
-                                          width: 16.w,
-                                          height: 16.w,
-                                          child: CircularProgressIndicator(
-                                            color: MyTheme.redColor,
-                                            strokeWidth: 2.w,
-                                          ),
-                                        )
+                                    width: 16.w,
+                                    height: 16.w,
+                                    child: CircularProgressIndicator(
+                                      color: MyTheme.redColor,
+                                      strokeWidth: 2.w,
+                                    ),
+                                  )
                                       : Icon(
-                                          Icons.delete_rounded,
-                                          size: 18.w,
-                                          color: MyTheme.orangeColor,
-                                        ),
+                                    Icons.delete_rounded,
+                                    size: 18.w,
+                                    color: MyTheme.orangeColor,
+                                  ),
                                 ),
                               ),
                             ],
@@ -876,7 +876,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: MyTheme.orangeColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10.r),
@@ -893,7 +893,7 @@ class _CartScreenState extends State<CartScreen> {
                       Text(
                         '${dataCart.length} Item${dataCart.length != 1 ? 's' : ''}',
                         style:
-                            MyTheme.lightTheme.textTheme.titleSmall?.copyWith(
+                        MyTheme.lightTheme.textTheme.titleSmall?.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: MyTheme.orangeColor,
@@ -910,13 +910,41 @@ class _CartScreenState extends State<CartScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Delivery Address',
-                  style: MyTheme.lightTheme.textTheme.titleMedium?.copyWith(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: MyTheme.mauveColor,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Delivery Address',
+                      style: MyTheme.lightTheme.textTheme.titleMedium?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: MyTheme.mauveColor,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        // التوجيه لصفحة إضافة عنوان جديد
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AddAddressScreen(),
+                          ),
+                        );
+                        // بعد الرجوع، نحدّث قائمة العناوين
+                        if (result == true) { // لو العنوان اتضاف بنجاح
+                          context.read<AddressBloc>().add(FetchAddressesEvent());
+                        }
+                      },
+                      child: Text(
+                        'Add New Address',
+                        style: MyTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                          fontSize: 12.sp,
+                          color: MyTheme.orangeColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 5.h),
                 BlocBuilder<AddressBloc, AddressState>(
@@ -929,20 +957,35 @@ class _CartScreenState extends State<CartScreen> {
                     } else if (addressState is FetchAddressesSuccessState) {
                       final addresses = addressState.viewAddresses.data ?? [];
                       if (addresses.isEmpty && !hasNavigatedToAddAddress) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) async {
                           setState(() {
                             hasNavigatedToAddAddress = true;
                           });
-                          Navigator.push(
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AddAddressScreen(),
                             ),
                           );
+                          // بعد الرجوع، نحدّث قائمة العناوين
+                          if (result == true) { // لو العنوان اتضاف بنجاح
+                            context.read<AddressBloc>().add(FetchAddressesEvent());
+                          }
                         });
                         return Center(
                           child: Text(
                             'Redirecting to add a new address...',
+                            style: MyTheme.lightTheme.textTheme.bodyMedium
+                                ?.copyWith(
+                              fontSize: 12.sp,
+                              color: MyTheme.grayColor2,
+                            ),
+                          ),
+                        );
+                      } else if (addresses.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'No addresses found. Please add an address.',
                             style: MyTheme.lightTheme.textTheme.bodyMedium
                                 ?.copyWith(
                               fontSize: 12.sp,
@@ -1012,7 +1055,7 @@ class _CartScreenState extends State<CartScreen> {
                         child: Text(
                           'Error loading addresses: ${addressState.message}',
                           style:
-                              MyTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                          MyTheme.lightTheme.textTheme.bodyMedium?.copyWith(
                             fontSize: 12.sp,
                             color: MyTheme.redColor,
                           ),
@@ -1152,9 +1195,9 @@ class _CartScreenState extends State<CartScreen> {
                       onPressed: () {
                         if (_couponController.text.isNotEmpty) {
                           context.read<CartBloc>().add(
-                                CheckCouponEvent(
-                                    couponName: _couponController.text),
-                              );
+                            CheckCouponEvent(
+                                couponName: _couponController.text),
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -1206,7 +1249,7 @@ class _CartScreenState extends State<CartScreen> {
                         Text(
                           'Coupon Applied: ${couponDiscount}% off',
                           style:
-                              MyTheme.lightTheme.textTheme.bodyMedium?.copyWith(
+                          MyTheme.lightTheme.textTheme.bodyMedium?.copyWith(
                             fontSize: 12.sp,
                             color: MyTheme.greenColor,
                           ),
@@ -1245,28 +1288,28 @@ class _CartScreenState extends State<CartScreen> {
                   onPressed: isLoading
                       ? null
                       : () {
-                          if (selectedAddressId == null) {
-                            _showErrorDialog(
-                                'Please select a delivery address.');
-                            return;
-                          }
-                          int orderstype = 1;
-                          double priceDelivery = 10.0;
-                          double ordersPrice = calculateTotalPrice(cart);
-                          double finalPrice = ordersPrice -
-                              (ordersPrice * (couponDiscount / 100));
+                    if (selectedAddressId == null) {
+                      _showErrorDialog(
+                          'Please select a delivery address.');
+                      return;
+                    }
+                    int orderstype = 1;
+                    double priceDelivery = 10.0;
+                    double ordersPrice = calculateTotalPrice(cart);
+                    double finalPrice = ordersPrice -
+                        (ordersPrice * (couponDiscount / 100));
 
-                          context.read<OrderBloc>().add(CheckoutEvent(
-                                userId: userId,
-                                addressId: int.parse(selectedAddressId!),
-                                orderstype: orderstype,
-                                priceDelivery: priceDelivery,
-                                ordersPrice: finalPrice,
-                                couponId: couponId,
-                                paymentMethod: paymentMethod,
-                                couponDiscount: couponDiscount,
-                              ));
-                        },
+                    context.read<OrderBloc>().add(CheckoutEvent(
+                      userId: userId,
+                      addressId: int.parse(selectedAddressId!),
+                      orderstype: orderstype,
+                      priceDelivery: priceDelivery,
+                      ordersPrice: finalPrice,
+                      couponId: couponId,
+                      paymentMethod: paymentMethod,
+                      couponDiscount: couponDiscount,
+                    ));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyTheme.orangeColor,
                     padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -1278,32 +1321,32 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   child: isLoading
                       ? SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: CircularProgressIndicator(
-                            color: MyTheme.whiteColor,
-                            strokeWidth: 2.w,
-                          ),
-                        )
+                    width: 20.w,
+                    height: 20.h,
+                    child: CircularProgressIndicator(
+                      color: MyTheme.whiteColor,
+                      strokeWidth: 2.w,
+                    ),
+                  )
                       : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.payment_rounded,
-                              size: 18.w,
-                              color: MyTheme.whiteColor,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              'Place Order (${(totalPrice - (totalPrice * (couponDiscount / 100))).toStringAsFixed(2)} EGP)',
-                              style: MyTheme.lightTheme.textTheme.displayMedium
-                                  ?.copyWith(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.payment_rounded,
+                        size: 18.w,
+                        color: MyTheme.whiteColor,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        'Place Order (${(totalPrice - (totalPrice * (couponDiscount / 100))).toStringAsFixed(2)} EGP)',
+                        style: MyTheme.lightTheme.textTheme.displayMedium
+                            ?.copyWith(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

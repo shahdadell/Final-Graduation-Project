@@ -178,7 +178,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> fetchServiceItems(
       FetchServiceItemsEvent event, Emitter<HomeState> emit) async {
     if (kDebugMode) {
-      print("FetchServiceItemsEvent Started for service ${event.serviceId}");
+      print("FetchServiceItemsEvent Started for service ${event.serviceId}, userId ${event.userId}");
     }
     emit(FetchServiceItemsLoadingState());
     try {
@@ -188,6 +188,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
       if (kDebugMode) {
         print("FetchServiceItemsEvent Succeeded with ${items.length} items");
+        // Log the items to debug
+        for (var item in items) {
+          print("Item: ${item.itemsName}, ID: ${item.itemsId}");
+        }
       }
       emit(FetchServiceItemsSuccessState(items: items));
     } catch (e) {

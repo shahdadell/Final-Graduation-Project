@@ -62,7 +62,7 @@ class DiscountListWidget extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: SizedBox(
-              height: 130.h,
+              height: 110.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: itemCount,

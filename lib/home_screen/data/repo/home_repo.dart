@@ -11,13 +11,12 @@ import 'package:graduation_project/home_screen/data/model/item_model_response/It
 import 'package:graduation_project/home_screen/data/model/offers_model_response/offers_model_response/offers_model_response.dart';
 import 'package:graduation_project/home_screen/data/model/services_model_response/service_model.dart';
 import 'package:graduation_project/home_screen/data/model/topSelling_model_response/TopSellinModelResponse.dart';
-import 'package:graduation_project/home_screen/data/model/search_model_response/SearchModelResponse.dart'
-    as search;
+import 'package:graduation_project/home_screen/data/model/search_model_response/SearchModelResponse.dart' as search;
 import '../../../local_data/shared_preference.dart';
 import '../model/Cart_model_response/CartAddResponse.dart';
 
 class HomeRepo {
-  // Updated at 03:04 AM EEST, Saturday, May 24, 2025
+  // Updated at 01:44 AM EEST, Wednesday, May 28, 2025
   static Future<List<Categorydatum>> fetchCategories() async {
     try {
       var response = await DioProvider.get(endpoint: AppEndpoints.fetchHome);
@@ -27,28 +26,16 @@ class HomeRepo {
       }
 
       if (response.statusCode == 200 && response.data['status'] == 'success') {
-        List<dynamic>? categoriesData;
-        if (response.data['data'] != null && response.data['data'] is List) {
-          categoriesData = response.data['data'] as List<dynamic>?;
-        } else if (response.data.toString().contains('}{')) {
-          final parts = response.data.toString().split('}{');
-          if (parts.isNotEmpty) {
-            final firstPart = parts[0].contains('[')
-                ? '{"status":"success","data":[' + parts[0].split('[')[1]
-                : '{"status":"success","data":[]}';
-            final parsed = jsonDecode(firstPart);
-            categoriesData = parsed['data'] as List<dynamic>?;
-          }
-        } else if (response.data['categories'] != null &&
-            response.data['categories']['data'] != null) {
-          categoriesData = response.data['categories']['data'] as List<dynamic>?;
-        }
+        List<dynamic>? categoriesData = response.data['categories']?['data'] as List<dynamic>?;
 
         if (categoriesData != null && categoriesData.isNotEmpty) {
           if (kDebugMode) {
             print("Categories Data Parsed: ${categoriesData.length} categories");
           }
-          return categoriesData.map((e) => Categorydatum.fromJson(e)).toList();
+          return categoriesData
+              .map((e) => Categorydatum.fromJson(e))
+              .where((category) => category.isDeleted == "0") // تصفية الكاتيجوريز الغير محذوفة
+              .toList();
         } else {
           throw Exception('Categories data is null or empty');
         }
@@ -61,6 +48,38 @@ class HomeRepo {
         print("Exception in fetchCategories: $e");
       }
       throw Exception('Error fetching categories: $e');
+    }
+  }
+
+  // Updated at 10:33 PM EEST, Tuesday, May 27, 2025
+  static Future<List<ItemModel>> fetchDiscountedItems() async {
+    try {
+      var response = await DioProvider.get(endpoint: AppEndpoints.fetchHome);
+      if (kDebugMode) {
+        print("Fetch Discounted Items Status Code: ${response.statusCode}");
+        print("Fetch Discounted Items Response: ${response.data}");
+      }
+
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        List<dynamic>? itemsData = response.data['items']?['data'] as List<dynamic>?;
+
+        if (itemsData != null && itemsData.isNotEmpty) {
+          if (kDebugMode) {
+            print("Discounted Items Data Parsed: ${itemsData.length} items");
+          }
+          return itemsData.map((e) => ItemModel.fromJson(e)).toList();
+        } else {
+          throw Exception('Discounted items data is null or missing');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch discounted items: ${response.data['message'] ?? 'Unknown error'}');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Exception in fetchDiscountedItems: $e");
+      }
+      throw Exception('Error fetching discounted items: $e');
     }
   }
 
@@ -111,52 +130,6 @@ class HomeRepo {
   }
 
   // Updated at 03:04 AM EEST, Saturday, May 24, 2025
-  static Future<List<ItemModel>> fetchDiscountedItems() async {
-    try {
-      var response = await DioProvider.get(endpoint: AppEndpoints.fetchHome);
-      if (kDebugMode) {
-        print("Fetch Discounted Items Status Code: ${response.statusCode}");
-        print("Fetch Discounted Items Response: ${response.data}");
-      }
-
-      if (response.statusCode == 200 && response.data['status'] == 'success') {
-        List<dynamic>? itemsData;
-        if (response.data['items'] != null && 
-            response.data['items']['data'] != null && 
-            response.data['items']['data'] is List) {
-          itemsData = response.data['items']['data'] as List<dynamic>?;
-        } else if (response.data.toString().contains('}{')) {
-          final parts = response.data.toString().split('}{');
-          if (parts.isNotEmpty) {
-            final firstPart = parts[0].contains('[')
-                ? '{"status":"success","items":{"data":[' + parts[0].split('[')[1]
-                : '{"status":"success","items":{"data":[]}}';
-            final parsed = jsonDecode(firstPart);
-            itemsData = parsed['items']['data'] as List<dynamic>?;
-          }
-        }
-
-        if (itemsData != null && itemsData.isNotEmpty) {
-          if (kDebugMode) {
-            print("Discounted Items Data Parsed: ${itemsData.length} items");
-          }
-          return itemsData.map((e) => ItemModel.fromJson(e)).toList();
-        } else {
-          throw Exception('Discounted items data is null or missing');
-        }
-      } else {
-        throw Exception(
-            'Failed to fetch discounted items: ${response.data['message'] ?? 'Unknown error'}');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Exception in fetchDiscountedItems: $e");
-      }
-      throw Exception('Error fetching discounted items: $e');
-    }
-  }
-
-  // Updated at 03:04 AM EEST, Saturday, May 24, 2025
   static Future<List<ServiceModel>> fetchServicesByCategory(int serviceId) async {
     try {
       final token = await AppLocalStorage.getData('token');
@@ -190,7 +163,7 @@ class HomeRepo {
   }) async {
     try {
       final token = await AppLocalStorage.getData('token');
-      var response = await DioProvider.get(
+      var response = await DioProvider.post(
         endpoint: "${AppEndpoints.fetchItems}?id=$serviceId&userid=$userId",
         headers: {
           'Authorization': 'Bearer $token',
@@ -245,8 +218,7 @@ class HomeRepo {
 
       if (response.statusCode == 200) {
         if (response.data['status'] == 'success') {
-          final searchResponse =
-              search.SearchModelResponse.fromJson(response.data);
+          final searchResponse = search.SearchModelResponse.fromJson(response.data);
           log('Parsed SearchModelResponse: $searchResponse');
           return searchResponse;
         } else {

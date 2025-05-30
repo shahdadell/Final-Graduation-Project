@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/API_Services/endpoints.dart';
 import 'package:graduation_project/auth/sing_in_screen/sign_in_screen.dart';
 import 'package:graduation_project/local_data/shared_preference.dart';
-import 'package:graduation_project/main.dart'; // استيراد navigatorKey من main.dart
+import 'package:graduation_project/main.dart';
 
 class DioProvider {
   static late Dio _dio;
-  static bool _isRedirecting = false; // لمنع التكرار في التوجيه
+  static bool _isRedirecting = false;
 
   static Future<void> init() async {
     await AppLocalStorage.init();
@@ -45,7 +45,6 @@ class DioProvider {
         String responseData = response.data.toString().trim();
         print('Trimmed Response: $responseData');
 
-        // تحسين التعامل مع JSON غير صحيح
         try {
           response.data = jsonDecode(responseData);
           print('Cleaned Response (Parsed JSON): ${response.data}');
@@ -75,16 +74,13 @@ class DioProvider {
         print('Error Response: ${e.response?.data}');
         print('Error Details: ${e.error}');
 
-        // التعامل مع الـ 401 Unauthorized
         if (e.response?.statusCode == 401 && !_isRedirecting) {
-          _isRedirecting = true; // لمنع التكرار
+          _isRedirecting = true;
           print('Unauthorized access detected, redirecting to SignInScreen...');
 
-          // إزالة الـ token القديم
           await AppLocalStorage.removeData('token');
           print('Old token removed from AppLocalStorage');
 
-          // عرض SnackBar
           if (navigatorKey.currentContext != null) {
             ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
               const SnackBar(
@@ -95,7 +91,6 @@ class DioProvider {
             );
           }
 
-          // التوجيه لصفحة تسجيل الدخول باستخدام navigatorKey
           Future.delayed(const Duration(seconds: 2), () {
             navigatorKey.currentState?.pushNamedAndRemoveUntil(
               SignInScreen.routName,
@@ -103,7 +98,6 @@ class DioProvider {
             );
           });
 
-          // إعادة تعيين المتغير بعد التوجيه
           Future.delayed(const Duration(seconds: 3), () {
             _isRedirecting = false;
           });
@@ -127,14 +121,17 @@ class DioProvider {
       'Content-Type': contentType,
     };
 
+    final bool isGuest = await AppLocalStorage.isGuest();
     final String? token = await _getToken();
-    print('Token in _prepareHeaders: $token');
-    if (token != null && token.isNotEmpty && token != 'your_token_here') {
+    if (token != null &&
+        token.isNotEmpty &&
+        !isGuest &&
+        token != 'your_token_here') {
       defaultHeaders['Authorization'] = 'Bearer $token';
       print('Authorization Header set to: Bearer $token');
     } else {
       print(
-          'No valid token found in AppLocalStorage, skipping Authorization header');
+          'No valid token or guest mode active, skipping Authorization header');
       defaultHeaders.remove('Authorization');
     }
 
