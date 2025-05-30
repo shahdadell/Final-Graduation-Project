@@ -31,7 +31,7 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
   }
 
   void _startPolling() {
-    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+    _timer = Timer.periodic(Duration(minutes: 30), (timer) {
       context
           .read<OrderBloc>()
           .add(FetchPendingOrdersEvent(userId: widget.userId));
